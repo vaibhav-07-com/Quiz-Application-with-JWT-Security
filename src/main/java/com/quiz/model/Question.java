@@ -16,7 +16,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "question_text", nullable = false)
+    @Column(name = "question_text", nullable = false, columnDefinition = "TEXT")
     private String questionText;
 
     @ElementCollection
@@ -36,8 +36,7 @@ public class Question {
     @Column(name = "time_limit")
     private int timeLimit;
 
-    @Column(length = 1000)
-    private String explanation;
+    @Column(length = 1000)    private String explanation;
 
     // Relationship with Quiz
     @ManyToOne
