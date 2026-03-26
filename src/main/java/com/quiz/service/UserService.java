@@ -37,7 +37,7 @@ public class UserService {
 
 		        UserResponseDto dto = new UserResponseDto();
 
-		        dto.setUser_id(user.getUser_id());
+		        dto.setUser_id(user.getId());
 		        dto.setUsername(user.getUsername());
 		        dto.setEmail(user.getEmail());
 		        dto.setGender(user.getGender());
@@ -70,7 +70,7 @@ public class UserService {
 
 	    // 4️⃣ Convert to Response DTO (no password)
 	    UserResponseDto response = new UserResponseDto();
-	    response.setUser_id(savedUser.getUser_id());
+	    response.setUser_id(savedUser.getId());
 	    response.setUsername(savedUser.getUsername());
 	    response.setEmail(savedUser.getEmail());
 	    response.setGender(savedUser.getGender());
@@ -100,7 +100,7 @@ public class UserService {
 
 	    // Convert to Response DTO (SAFE)
 	    UserResponseDto response = new UserResponseDto();
-	    response.setUser_id(updatedUser.getUser_id());
+	    response.setUser_id(updatedUser.getId());
 	    response.setUsername(updatedUser.getUsername());
 	    response.setEmail(updatedUser.getEmail());
 	    response.setGender(updatedUser.getGender());
@@ -127,7 +127,7 @@ public class UserService {
 
 	    // 3️⃣ Convert to Response DTO (no password)
 	    UserResponseDto response = new UserResponseDto();
-	    response.setUser_id(user.getUser_id());
+	    response.setUser_id(user.getId());
 	    response.setUsername(user.getUsername());
 	    response.setEmail(user.getEmail());
 	    response.setGender(user.getGender());
@@ -145,7 +145,7 @@ public class UserService {
 
 	    // 2️⃣ Convert to Response DTO
 	    UserResponseDto response = new UserResponseDto();
-	    response.setUser_id(user.getUser_id());
+	    response.setUser_id(user.getId());
 	    response.setUsername(user.getUsername());
 	    response.setEmail(user.getEmail());
 	    response.setGender(user.getGender());
