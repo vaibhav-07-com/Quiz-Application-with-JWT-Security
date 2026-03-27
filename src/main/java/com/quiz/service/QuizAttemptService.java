@@ -2,12 +2,16 @@ package com.quiz.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.quiz.dto.*;
+import com.quiz.enums.DifficultyLevel;
 import com.quiz.model.*;
 import com.quiz.repository.*;
 
@@ -55,6 +59,48 @@ public class QuizAttemptService {
         dto.setAttemptedAt(saved.getAttemptedAt());
 
         return dto;
+    }
+    
+    public List<QuestionResponseDto> getQuestionsForAttempt(int attemptId) {
+        // 1️⃣ Fetch the attempt
+        QuizAttempt attempt = attemptRepo.findById(attemptId)
+                .orElseThrow(() -> new RuntimeException("Attempt not found"));
+
+        int totalQuestions = 10; // or pass some default number
+        int easyCount = (int) Math.round(totalQuestions * 0.7);
+        int mediumCount = (int) Math.round(totalQuestions * 0.2);
+        int hardCount = totalQuestions - easyCount - mediumCount; // remaining
+
+        // 2️⃣ Fetch questions by difficulty
+        List<Question> easyQuestions = questionRepo.findByQuiz_QidAndDifficultyLevel(
+                attempt.getQuiz().getQid(), DifficultyLevel.EASY, PageRequest.of(0, easyCount));
+        List<Question> mediumQuestions = questionRepo.findByQuiz_QidAndDifficultyLevel(
+                attempt.getQuiz().getQid(), DifficultyLevel.MEDIUM, PageRequest.of(0, mediumCount));
+        List<Question> hardQuestions = questionRepo.findByQuiz_QidAndDifficultyLevel(
+                attempt.getQuiz().getQid(), DifficultyLevel.HARD, PageRequest.of(0, hardCount));
+
+        // 3️⃣ Combine all questions
+        List<Question> allQuestions = new ArrayList<>();
+        allQuestions.addAll(easyQuestions);
+        allQuestions.addAll(mediumQuestions);
+        allQuestions.addAll(hardQuestions);
+
+        // 4️⃣ Shuffle the list so questions are in random order
+        Collections.shuffle(allQuestions);
+
+        // 5️⃣ Convert to DTO
+        List<QuestionResponseDto> list = allQuestions.stream().map(q -> {
+            QuestionResponseDto dto = new QuestionResponseDto();
+            dto.setId(q.getId());
+            dto.setQuestionText(q.getQuestionText());
+            dto.setOptions(q.getOptions());
+            dto.setDifficultyLevel(q.getDifficultyLevel().name());
+            dto.setMarks(q.getMarks());
+            dto.setTimeLimit(q.getTimeLimit());
+            return dto;
+        }).collect(Collectors.toList());
+
+        return list;
     }
 
     // SUBMIT QUIZ
@@ -150,4 +196,5 @@ public class QuizAttemptService {
 
         return list;
     }
+    
 }

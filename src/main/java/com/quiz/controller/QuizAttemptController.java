@@ -2,6 +2,7 @@ package com.quiz.controller;
 
 import com.quiz.dto.QuizSubmitRequestDto;
 import com.quiz.dto.QuizSubmitResponseDto;
+import com.quiz.dto.QuestionResponseDto;
 import com.quiz.dto.QuizAttemptResponseDto;
 import com.quiz.service.QuizAttemptService;
 
@@ -34,6 +35,15 @@ public class QuizAttemptController {
                 attemptService.startQuiz(quizId, userId);
 
         return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/{attemptId}/questions")
+    public ResponseEntity<List<QuestionResponseDto>> getQuestions(
+            @PathVariable int attemptId) {
+
+        return ResponseEntity.ok(
+                attemptService.getQuestionsForAttempt(attemptId)
+        );
     }
 
     // Submit quiz answers
