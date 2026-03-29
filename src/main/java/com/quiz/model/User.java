@@ -20,6 +20,7 @@ public class User {
 	private String password;
 	private String gender;
 	private String profile_image;
-	private long contact;
+	private String contact;
+	private String role;
 	
 }

@@ -61,7 +61,7 @@ public class QuizAttemptService {
         return dto;
     }
     
-    public List<QuestionResponseDto> getQuestionsForAttempt(int attemptId) {
+    public List<QuestionUserResponseDto> getQuestionsForAttempt(int attemptId) {
         // 1️⃣ Fetch the attempt
         QuizAttempt attempt = attemptRepo.findById(attemptId)
                 .orElseThrow(() -> new RuntimeException("Attempt not found"));
@@ -89,12 +89,11 @@ public class QuizAttemptService {
         Collections.shuffle(allQuestions);
 
         // 5️⃣ Convert to DTO
-        List<QuestionResponseDto> list = allQuestions.stream().map(q -> {
-            QuestionResponseDto dto = new QuestionResponseDto();
+        List<QuestionUserResponseDto> list = allQuestions.stream().map(q -> {
+        	QuestionUserResponseDto dto = new QuestionUserResponseDto();
             dto.setId(q.getId());
             dto.setQuestionText(q.getQuestionText());
             dto.setOptions(q.getOptions());
-            dto.setDifficultyLevel(q.getDifficultyLevel().name());
             dto.setMarks(q.getMarks());
             dto.setTimeLimit(q.getTimeLimit());
             return dto;

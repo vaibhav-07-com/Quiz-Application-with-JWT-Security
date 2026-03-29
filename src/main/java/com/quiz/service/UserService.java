@@ -37,7 +37,7 @@ public class UserService {
 
 		        UserResponseDto dto = new UserResponseDto();
 
-		        dto.setUser_id(user.getId());
+		        dto.setId(user.getId());
 		        dto.setUsername(user.getUsername());
 		        dto.setEmail(user.getEmail());
 		        dto.setGender(user.getGender());
@@ -64,13 +64,14 @@ public class UserService {
 	    user.setContact(dto.getContact());
 	    user.setProfile_image(dto.getProfile_image());
 	    user.setPassword(passwordEncoder.encode(dto.getPassword()));
+	    user.setRole("USER");
 
 	    // 3️⃣ Save user
 	    User savedUser = repo.save(user);
 
 	    // 4️⃣ Convert to Response DTO (no password)
 	    UserResponseDto response = new UserResponseDto();
-	    response.setUser_id(savedUser.getId());
+	    response.setId(savedUser.getId());
 	    response.setUsername(savedUser.getUsername());
 	    response.setEmail(savedUser.getEmail());
 	    response.setGender(savedUser.getGender());
@@ -91,16 +92,11 @@ public class UserService {
 	    existingUser.setProfile_image(dto.getProfile_image());
 	    existingUser.setContact(dto.getContact());
 
-	    // Only update password if provided
-	    if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
-	        existingUser.setPassword(passwordEncoder.encode(dto.getPassword()));
-	    }
-
 	    User updatedUser = this.repo.save(existingUser);
 
 	    // Convert to Response DTO (SAFE)
 	    UserResponseDto response = new UserResponseDto();
-	    response.setUser_id(updatedUser.getId());
+	    response.setId(updatedUser.getId());
 	    response.setUsername(updatedUser.getUsername());
 	    response.setEmail(updatedUser.getEmail());
 	    response.setGender(updatedUser.getGender());
@@ -127,7 +123,7 @@ public class UserService {
 
 	    // 3️⃣ Convert to Response DTO (no password)
 	    UserResponseDto response = new UserResponseDto();
-	    response.setUser_id(user.getId());
+	    response.setId(user.getId());
 	    response.setUsername(user.getUsername());
 	    response.setEmail(user.getEmail());
 	    response.setGender(user.getGender());
@@ -145,7 +141,7 @@ public class UserService {
 
 	    // 2️⃣ Convert to Response DTO
 	    UserResponseDto response = new UserResponseDto();
-	    response.setUser_id(user.getId());
+	    response.setId(user.getId());
 	    response.setUsername(user.getUsername());
 	    response.setEmail(user.getEmail());
 	    response.setGender(user.getGender());
@@ -165,6 +161,10 @@ public class UserService {
 	    // 2️⃣ Check old password
 	    if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
 	        throw new RuntimeException("Old password is incorrect");
+	    }
+	    
+	    if (newPassword.length() < 6) {
+	        throw new RuntimeException("New password must be at least 6 characters");
 	    }
 
 	    // 3️⃣ Encode new password

@@ -3,6 +3,7 @@ package com.quiz.controller;
 import com.quiz.dto.QuizSubmitRequestDto;
 import com.quiz.dto.QuizSubmitResponseDto;
 import com.quiz.dto.QuestionResponseDto;
+import com.quiz.dto.QuestionUserResponseDto;
 import com.quiz.dto.QuizAttemptResponseDto;
 import com.quiz.service.QuizAttemptService;
 
@@ -38,7 +39,7 @@ public class QuizAttemptController {
     }
     
     @GetMapping("/{attemptId}/questions")
-    public ResponseEntity<List<QuestionResponseDto>> getQuestions(
+    public ResponseEntity<List<QuestionUserResponseDto>> getQuestions(
             @PathVariable int attemptId) {
 
         return ResponseEntity.ok(
